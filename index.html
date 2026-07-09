@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartNoteHub - Intelligent Notes</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Noto+Sans+Sinhala:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Include PDF.js from CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <!-- Include Mermaid.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <!-- Include LocalForage for IndexedDB History -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
+</head>
+<body>
+    
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-box">
+            <h1>Welcome to SmartNoteHub</h1>
+            <p>Because this app runs privately on your device, you don't need a registered account. Just type <strong>any</strong> username and password to secure your local history!</p>
+            <input type="text" id="loginUsername" placeholder="Create or Enter username" class="login-input" />
+            <input type="password" id="loginPassword" placeholder="Create or Enter password" class="login-input" />
+            <button id="loginBtn" class="btn">Start Studying</button>
+            <p id="loginError" class="error-text" style="display: none;"></p>
+        </div>
+    </div>
+
+    <!-- MAIN APP LAYOUT (Hidden until login) -->
+    <div id="appLayout" class="app-layout" style="display: none;">
+        
+        <!-- HISTORY SIDEBAR -->
+        <aside id="historySidebar" class="history-sidebar no-print">
+            <div class="sidebar-header">
+                <h2>Study History</h2>
+                <button id="logoutBtn" class="btn btn-secondary btn-small">Logout</button>
+            </div>
+            <div id="historyList" class="history-list">
+                <!-- History items injected here -->
+                <p class="history-empty">No past sessions found.</p>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTAINER -->
+        <main class="main-container">
+            <div class="container">
+                <header class="header">
+                    <h1>SmartNoteHub</h1>
+                    <p>Transform your lecture PDFs into smart, bilingual short notes directly in your browser.</p>
+                </header>
+
+                <div class="api-key-section">
+                    <label for="apiKey">Gemini API Key:</label>
+                    <input type="password" id="apiKey" value="AIzaSyD5FDmiuTU93ygcOuXljXqkpwVci0TZ5vQ" placeholder="Paste your Google Gemini API Key here" />
+                </div>
+
+                <div class="mode-selector">
+                    <label class="radio-label">
+                        <input type="radio" name="generationMode" value="lectures" checked>
+                        <span class="radio-custom"></span>
+                        Lecture Notes Mode
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="generationMode" value="pastpapers">
+                        <span class="radio-custom"></span>
+                        Past Paper Mode (Guessing Exam)
+                    </label>
+                </div>
+
+                <div class="upload-zone" id="dropZone">
+                    <div class="upload-icon">📄</div>
+                    <p>Drag and drop your lecture PDFs/PPTs here</p>
+                    <p class="sub-text">or click to browse</p>
+                    <input type="file" id="fileInput" accept=".pdf, .pptx, application/pdf, application/vnd.openxmlformats-officedocument.presentationml.presentation" class="file-input" multiple>
+                    <div id="fileList" class="file-list"></div>
+                </div>
+
+                <div class="action-section">
+                    <button id="generateBtn" class="btn" disabled>Generate Bilingual Notes</button>
+                    <button id="downloadBtn" class="btn btn-secondary" style="display: none; margin-left: 1rem;">Download as PDF</button>
+                </div>
+                
+                <div id="errorDisplay" class="error-display" style="display: none;"></div>
+
+                <div id="notesContainer" class="notes-container" style="display: none;">
+                    <div class="note-card unified-card">
+                        <h2>Generated Short Notes</h2>
+                        <div id="processingTimeDisplay" class="no-print" style="text-align: right; color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.9rem;"></div>
+                        <div id="unifiedContent" class="note-content"></div>
+                        
+                        <div id="paginationControls" class="pagination-controls no-print" style="display: none;">
+                            <button id="prevNoteBtn" class="btn btn-secondary">⬅️ Previous Lecture</button>
+                            <span id="pageIndicator" class="page-indicator">Lecture 1 of 1</span>
+                            <button id="nextNoteBtn" class="btn btn-secondary">Next Lecture ➡️</button>
+                        </div>
+                    </div>
+                    
+                    <div class="search-section no-print">
+                        <h3>Ask AI About This Lecture</h3>
+                        <div class="search-box">
+                            <input type="text" id="searchInput" placeholder="E.g., What is the main formula for thermodynamics?" />
+                            <button id="searchBtn" class="btn">Ask</button>
+                        </div>
+                        <div id="searchResults" class="search-results" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="app_v2.js"></script>
+</body>
+</html>
