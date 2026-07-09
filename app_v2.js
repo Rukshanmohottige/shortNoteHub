@@ -235,8 +235,8 @@ function fileToBase64(file) {
 
 async function generateWithFallback(parts, fileName, apiKey, notesDataArray, headingTitle) {
     const fallbackModels = [
-        "gemini-1.5-flash", 
-        "gemini-1.5-pro"
+        "gemini-flash-latest", 
+        "gemini-1.5-pro-latest"
     ];
     
     let response = null;
@@ -406,6 +406,12 @@ generateBtn.addEventListener('click', async () => {
                 ];
 
                 await generateWithFallback(parts, file.name, apiKey, generatedNotesData, `📝 Notes for: ${file.name}`);
+                
+                // Add a small 4-second delay between files to prevent triggering Google's massive 36-second ban
+                if (i < selectedFiles.length - 1) {
+                    generateBtn.textContent = `Cooling down API to prevent rate limits...`;
+                    await sleep(4000);
+                }
             }
             
             // Save to History
@@ -557,7 +563,7 @@ searchBtn.addEventListener('click', async () => {
         
         parts.push({ text: prompt });
 
-        const fallbackModels = ["gemini-1.5-flash", "gemini-1.5-pro"];
+        const fallbackModels = ["gemini-flash-latest", "gemini-1.5-pro-latest"];
         let response = null;
         let lastErrorMessage = "";
 
