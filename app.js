@@ -235,10 +235,8 @@ function fileToBase64(file) {
 
 async function generateWithFallback(parts, fileName, apiKey, notesDataArray, headingTitle) {
     const fallbackModels = [
-        "gemini-3.5-flash", 
-        "gemini-2.5-flash", 
-        "gemini-3.1-flash-lite-preview", 
-        "gemini-flash-latest"
+        "gemini-1.5-flash", 
+        "gemini-1.5-pro"
     ];
     
     let response = null;
@@ -559,7 +557,7 @@ searchBtn.addEventListener('click', async () => {
         
         parts.push({ text: prompt });
 
-        const fallbackModels = ["gemini-3.5-flash", "gemini-2.5-flash", "gemini-3.1-flash-lite-preview", "gemini-flash-latest"];
+        const fallbackModels = ["gemini-1.5-flash", "gemini-1.5-pro"];
         let response = null;
         let lastErrorMessage = "";
 
