@@ -30,6 +30,8 @@ function getObfuscatedApiKey() {
     return k1 + k2 + k3 + k4 + k5;
 }
 
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
 const searchResults = document.getElementById('searchResults');
@@ -230,8 +232,10 @@ async function generateWithFallback(parts, fileName, apiKey, notesDataArray, hea
     
     let response = null;
     let lastErrorMessage = "";
+    let rateLimitRetries = 0;
 
-    for (const model of fallbackModels) {
+    for (let attempt = 0; attempt < fallbackModels.length; attempt++) {
+        const model = fallbackModels[attempt];
         try {
             const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`, {
                 method: 'POST',
@@ -253,6 +257,13 @@ async function generateWithFallback(parts, fileName, apiKey, notesDataArray, hea
             } else {
                 const errData = await res.json();
                 lastErrorMessage = errData.error?.message || `Error ${res.status}`;
+                
+                if (res.status === 429 && rateLimitRetries < 3) {
+                    rateLimitRetries++;
+                    generateBtn.textContent = `Google API limit reached. Pausing for 36 seconds...`;
+                    await sleep(36000);
+                    attempt--; // Retry this model again after sleeping
+                }
             }
         } catch (err) {
             lastErrorMessage = err.message;
