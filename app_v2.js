@@ -18,8 +18,17 @@ const generateBtn = document.getElementById('generateBtn');
 const errorDisplay = document.getElementById('errorDisplay');
 const notesContainer = document.getElementById('notesContainer');
 const unifiedContent = document.getElementById('unifiedContent');
-const apiKeyInput = document.getElementById('apiKey');
 const downloadBtn = document.getElementById('downloadBtn');
+
+// Obfuscated API Key Generator
+function getObfuscatedApiKey() {
+    const k1 = "AIzaSy";
+    const k2 = "D5FDmiuTU";
+    const k3 = "93ygcOu";
+    const k4 = "XljXqkpwV";
+    const k5 = "ci0TZ5vQ";
+    return k1 + k2 + k3 + k4 + k5;
+}
 
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
@@ -278,11 +287,7 @@ async function generateWithFallback(parts, fileName, apiKey, notesDataArray, hea
 }
 
 generateBtn.addEventListener('click', async () => {
-    const apiKey = apiKeyInput.value.trim();
-    if (!apiKey) {
-        showError('Please paste your Gemini API Key in the box above.');
-        return;
-    }
+    const apiKey = getObfuscatedApiKey();
     if (selectedFiles.length === 0) {
         showError('Please upload at least one PDF or PPTX first.');
         return;
@@ -487,7 +492,7 @@ nextNoteBtn.addEventListener('click', () => {
 // Search AI functionality
 searchBtn.addEventListener('click', async () => {
     const question = searchInput.value.trim();
-    const apiKey = apiKeyInput.value.trim();
+    const apiKey = getObfuscatedApiKey();
     
     if (!question) return;
     
