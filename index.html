@@ -50,6 +50,15 @@
                     <p>Transform your lecture PDFs into smart, bilingual short notes directly in your browser.</p>
                 </header>
 
+                <div id="apiKeySection" class="api-key-section" style="margin-bottom: 20px; padding: 15px; background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 8px;">
+                    <label for="apiKey" style="display: block; margin-bottom: 8px;">Secure Gemini API Key (Saved Locally):</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="password" id="apiKey" placeholder="Paste your new API Key here" style="flex: 1; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color);" />
+                        <button id="saveApiBtn" class="btn" style="padding: 10px 20px;">Save Key</button>
+                    </div>
+                    <p style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 8px;">Your key is encrypted in your browser and NEVER sent to our servers.</p>
+                </div>
+
                 <div class="mode-selector">
                     <label class="radio-label">
                         <input type="radio" name="generationMode" value="lectures" checked>

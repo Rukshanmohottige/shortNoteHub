@@ -20,15 +20,26 @@ const notesContainer = document.getElementById('notesContainer');
 const unifiedContent = document.getElementById('unifiedContent');
 const downloadBtn = document.getElementById('downloadBtn');
 
-// Obfuscated API Key Generator
-function getObfuscatedApiKey() {
-    const k1 = "AIzaSy";
-    const k2 = "D5FDmiuTU";
-    const k3 = "93ygcOu";
-    const k4 = "XljXqkpwV";
-    const k5 = "ci0TZ5vQ";
-    return k1 + k2 + k3 + k4 + k5;
+const apiKeySection = document.getElementById('apiKeySection');
+const apiKeyInput = document.getElementById('apiKey');
+const saveApiBtn = document.getElementById('saveApiBtn');
+
+// Handle API Key Saving
+const savedApiKey = localStorage.getItem('smartNoteApiKey');
+if (savedApiKey) {
+    apiKeySection.style.display = 'none';
 }
+
+saveApiBtn.addEventListener('click', () => {
+    const key = apiKeyInput.value.trim();
+    if (key.length > 10) {
+        localStorage.setItem('smartNoteApiKey', key);
+        apiKeySection.style.display = 'none';
+        alert("API Key saved securely to your browser!");
+    } else {
+        alert("Please enter a valid API key.");
+    }
+});
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -298,7 +309,13 @@ async function generateWithFallback(parts, fileName, apiKey, notesDataArray, hea
 }
 
 generateBtn.addEventListener('click', async () => {
-    const apiKey = getObfuscatedApiKey();
+    const apiKey = localStorage.getItem('smartNoteApiKey');
+    if (!apiKey) {
+        apiKeySection.style.display = 'block';
+        showError('Please paste your Gemini API Key and save it first.');
+        return;
+    }
+
     if (selectedFiles.length === 0) {
         showError('Please upload at least one PDF or PPTX first.');
         return;
@@ -503,7 +520,12 @@ nextNoteBtn.addEventListener('click', () => {
 // Search AI functionality
 searchBtn.addEventListener('click', async () => {
     const question = searchInput.value.trim();
-    const apiKey = getObfuscatedApiKey();
+    const apiKey = localStorage.getItem('smartNoteApiKey');
+    
+    if (!apiKey) {
+        alert("Please save your API key first!");
+        return;
+    }
     
     if (!question) return;
     
